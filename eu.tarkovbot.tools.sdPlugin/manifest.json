@@ -1,0 +1,102 @@
+{
+	"SDKVersion": 2,
+	"Author": "TarkovBOT.eu",
+	"CodePath": "app.html",
+	"Description": "Tools designed for Escape from Tarkov streamers and regular players.",
+	"Name": "Escape from Tarkov Tools",
+	"Icon": "assets/icon",
+	"URL": "https://tarkovbot.eu/stream-deck",
+	"Version": "1.0.0",
+	"Software": {
+		"MinimumVersion": "5.0"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "10.11"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Category": "TarkovBOT.eu",
+	"CategoryIcon": "assets/categoryicon",
+	"Actions": [
+		{
+			"Icon": "assets/actionicon_goons",
+			"Name": "GoonsTracker - Latest Report",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "$B1",
+				"TriggerDescription": {
+					"Rotate": "Describe the rotation",
+					"Push": "Describe the encoder push",
+					"Touch": "Describe the touch",
+					"LongTouch": "Describe the long touch"
+				}
+			},
+			"States": [
+				{
+					"TitleAlignment": "middle"
+				}
+			],
+			"Tooltip": "Simply move this action to any button and then press it to retrieve latest reported location.\nRemember to set up your access token obtained from our website dashboard for this feature to work.",
+			"UserTitleEnabled": false,
+			"UUID": "eu.tarkovbot.tools.goonsgetlocation",
+			"PropertyInspectorPath": "property-inspector/inspector_goons.html"
+		},
+		{
+			"Icon": "assets/actionicon_time",
+			"Name": "Tarkov Time",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "$B1",
+				"TriggerDescription": {
+					"Rotate": "Describe the rotation",
+					"Push": "Describe the encoder push",
+					"Touch": "Describe the touch",
+					"LongTouch": "Describe the long touch"
+				}
+			},
+			"States": [
+				{
+					"TitleAlignment": "middle",
+					"FontSize": "13"
+				}
+			],
+			"Tooltip": "Simply move this action to any button and wait for the time to show.",
+			"UserTitleEnabled": false,
+			"UUID": "eu.tarkovbot.tools.tarkovtime"
+		},
+
+
+
+
+
+
+		{
+			"Icon": "assets/actionicon_traderrestock",
+			"Name": "Trader Restock Timer",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "$B1",
+				"TriggerDescription": {
+					"Rotate": "Describe the rotation",
+					"Push": "Describe the encoder push",
+					"Touch": "Describe the touch",
+					"LongTouch": "Describe the long touch"
+				}
+			},
+			"States": [
+				{
+					"TitleAlignment": "middle",
+					"FontSize": "10"
+				}
+			],
+			"Tooltip": "Simply move this action to any button and wait for the time to show.",
+			"UserTitleEnabled": false,
+			"UUID": "eu.tarkovbot.tools.traderrestock"
+		}
+	]
+}

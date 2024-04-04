@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>eu.tarkovbot.tools Property Inspector</title>
+    <link rel="stylesheet" href="../libs/css/sdpi.css" />
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <hr class="tab-separator">
+        <form id="property-inspector">
+            <div id="tab1" class="tab-container">
+                <div class="sdpi-item">
+                    <div data-localize class="sdpi-item-label" title="My name">Access Token</div>
+                    <input data-localize class="sdpi-item-value" name="token" type="text" value=""
+                        placeholder="Your Token" />      
+                </div>
+            </div>
+        </form>
+
+        <div class="sdpi-item">
+            <p><b style="color:orange">To access this feature, please enter your token above.</b> Tokens can be obtained by logging into our website and navigating to the dashboard. From there, go to the StreamDeck section.</p>
+        </div>
+        <div class="sdpi-item">
+            <a href="https://tarkovbot.eu/stream-deck" target="_blank">More information</a>
+        </div>
+    </div>
+
+    <!-- Stream Deck Libs -->
+    <script src="../libs/js/constants.js"></script>
+    <script src="../libs/js/prototypes.js"></script>
+    <script src="../libs/js/timers.js"></script>
+    <script src="../libs/js/utils.js"></script>
+    <script src="../libs/js/events.js"></script>
+    <script src="../libs/js/api.js"></script>
+    <script src="../libs/js/property-inspector.js"></script>
+    <script src="../libs/js/dynamic-styles.js"></script>
+
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>
