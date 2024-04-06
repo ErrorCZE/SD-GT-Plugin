@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>eu.tarkovbot.tools Property Inspector</title>
+    <link rel="stylesheet" href="../libs/css/sdpi.css" />
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <hr class="tab-separator">
+        <form id="property-inspector">
+            <div class="sdpi-item" id="select_single">
+                <div class="sdpi-item-label">Select</div>
+                <select class="sdpi-item-value select" name="select_single" id="select_single">
+                    <option value="SELECT-TRADER">SELECT TRADER</option>
+                    <option value="Prapor">Prapor</option>
+                    <option value="Therapist">Therapist</option>
+                    <option value="Fence">Fence</option>
+                    <option value="Skier">Skier</option>
+                    <option value="Peacekeeper">Peacekeeper</option>
+                    <option value="Mechanic">Mechanic</option>
+                    <option value="Ragman">Ragman</option>
+                    <option value="Jaeger">Jaeger</option>
+                </select>
+              </div>
+        </form>
+    </div>
+
+    <!-- Stream Deck Libs -->
+    <script src="../libs/js/constants.js"></script>
+    <script src="../libs/js/prototypes.js"></script>
+    <script src="../libs/js/timers.js"></script>
+    <script src="../libs/js/utils.js"></script>
+    <script src="../libs/js/events.js"></script>
+    <script src="../libs/js/api.js"></script>
+    <script src="../libs/js/property-inspector.js"></script>
+    <script src="../libs/js/dynamic-styles.js"></script>
+
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>

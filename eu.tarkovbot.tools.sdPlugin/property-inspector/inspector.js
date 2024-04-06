@@ -3,20 +3,54 @@
 
 $PI.onConnected((jsn) => {
     const form = document.querySelector('#property-inspector');
-    const {actionInfo, appInfo, connection, messageType, port, uuid} = jsn;
-    const {payload, context} = actionInfo;
-    const {settings} = payload;
+    const { actionInfo } = jsn;
+    const { payload } = actionInfo;
+    const { settings } = payload;
 
-    Utils.setFormValue(settings, form);
+    // Function to set form value based on settings
+    const setFormValue = (settings, form) => {
+        for (let key in settings) {
+            if (form.elements[key]) {
+                if (form.elements[key].tagName === 'SELECT') {
+                    form.elements[key].value = settings[key];
+                } else {
+                    form.elements[key].value = settings[key];
+                }
+            }
+        }
+    };
 
-    form.addEventListener(
-        'input',
-        Utils.debounce(150, () => {
-            const value = Utils.getFormValue(form);
+    // Function to get form value
+    const getFormValue = (form) => {
+        const formData = new FormData(form);
+        const value = {};
+        formData.forEach((val, key) => {
+            value[key] = val;
+        });
+        return value;
+    };
+
+    // Set initial form values
+    setFormValue(settings, form);
+
+    // Event listener for changes in the form inputs
+    const inputs = form.querySelectorAll('.sdpi-item-value');
+    inputs.forEach(input => {
+        input.addEventListener('change', Utils.debounce(150, (event) => {
+            const value = getFormValue(form);
             $PI.setSettings(value);
-        })
-    );
+        }));
+    });
+
+    // Event listener for changes in the select element
+    const select = form.querySelector('.sdpi-item-value.select');
+    select.addEventListener('change', Utils.debounce(150, (event) => {
+        const value = getFormValue(form);
+        $PI.setSettings(value);
+    }));
 });
+
+
 
 $PI.onDidReceiveGlobalSettings(({payload}) => {
     console.log('onDidReceiveGlobalSettings', payload);

@@ -96,7 +96,8 @@
 			],
 			"Tooltip": "Simply move this action to any button and wait for the time to show.",
 			"UserTitleEnabled": false,
-			"UUID": "eu.tarkovbot.tools.traderrestock"
+			"UUID": "eu.tarkovbot.tools.traderrestock",
+			"PropertyInspectorPath": "property-inspector/inspector_traderrestock.html"
 		}
 	]
 }

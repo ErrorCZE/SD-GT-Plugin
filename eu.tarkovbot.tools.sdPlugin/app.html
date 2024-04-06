@@ -150,9 +150,16 @@
 
             type: "eu.tarkovbot.tools.traderrestock",
 
+            onKeyDown: function (context, settings, coordinates, userDesiredState) {
+                let trader = settings["select_single"];
+                traderrestockAction.SetTitle(context, "xx"+trader);
+                traderrestockAction.SetImage(context, `assets/${trader}.png`);
+            },
+
             onWillAppear: function (context, settings, coordinates) {
-                this.SetTitle(context, "03:59:56");
-                this.SetImage(context, "assets/Fence.png");
+                let trader = settings["select_single"];
+                this.SetTitle(context, trader);
+                this.SetImage(context, `assets/${trader}.png`);
             },
 
 
@@ -220,6 +227,8 @@
                         tarkovTimeAction.onKeyDown(context, settings, coordinates, userDesiredState);
                     } else if (jsonObj['action'] === "eu.tarkovbot.tools.goonsgetlocation") {
                         goonsTrackerAction.onKeyDown(context, settings, coordinates, userDesiredState);
+                    } else if (jsonObj['action'] === "eu.tarkovbot.tools.traderrestock") {
+                        traderrestockAction.onKeyDown(context, settings, coordinates, userDesiredState);
                     }
                 } else if (event == "keyUp") {
                     var jsonPayload = jsonObj['payload'];
