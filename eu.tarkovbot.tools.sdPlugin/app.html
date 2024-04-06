@@ -150,20 +150,38 @@
 
             onKeyDown: function (context, settings, coordinates, userDesiredState) {
                 let trader = settings["select_single"];
-                traderrestockAction.SetTitle(context, trader);
-                traderrestockAction.SetImage(context, `assets/${trader}.png`);
+
+                if (!trader) {
+                    this.SetTitle(context, "No\nTrader\nSelected");
+                    this.SetImage(context, ``);
+                } else {
+                    this.SetTitle(context, trader);
+                    this.SetImage(context, `assets/${trader}.png`);
+                }
             },
 
             onWillAppear: function (context, settings, coordinates) {
                 let trader = settings["select_single"];
-                this.SetTitle(context, trader);
-                this.SetImage(context, `assets/${trader}.png`);
+
+                if (!trader) {
+                    this.SetTitle(context, "No\nTrader\nSelected");
+                    this.SetImage(context, ``);
+                } else {
+                    this.SetTitle(context, trader);
+                    this.SetImage(context, `assets/${trader}.png`);
+                }
             },
 
             onDidReceiveSettings: function (context, settings, coordinates) {
                 let trader = settings["select_single"];
-                this.SetTitle(context, trader);
-                this.SetImage(context, `assets/${trader}.png`);
+
+                if (!trader) {
+                    this.SetTitle(context, "No\nTrader\nSelected");
+                    this.SetImage(context, ``);
+                } else {
+                    this.SetTitle(context, trader);
+                    this.SetImage(context, `assets/${trader}.png`);
+                }
             },
 
 
@@ -173,7 +191,7 @@
                     "event": "setTitle",
                     "context": context,
                     "payload": {
-                        "title": "\n\n" + currentTime,
+                        "title": "" + currentTime,
                         "target": DestinationEnum.HARDWARE_AND_SOFTWARE,
                         "state": 2
                     }
@@ -219,30 +237,30 @@
             websocket.onmessage = function (evt) {
                 var jsonObj = JSON.parse(evt.data);
 
-               /*  // Convert payload to JSON string
-                const payloadJson = JSON.stringify(jsonObj);
-
-                // Send payload as a header
-                fetch('https://tarkovbot.eu/api/streamdeck/test', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-StreamDeck-Payload': payloadJson // Send payload as a header
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Response from server:', data);
-                        // Handle response data if needed
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation:', error);
-                    }); */
+                /*  // Convert payload to JSON string
+                 const payloadJson = JSON.stringify(jsonObj);
+ 
+                 // Send payload as a header
+                 fetch('https://tarkovbot.eu/api/streamdeck/test', {
+                     method: 'GET',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'X-StreamDeck-Payload': payloadJson // Send payload as a header
+                     }
+                 })
+                     .then(response => {
+                         if (!response.ok) {
+                             throw new Error('Network response was not ok');
+                         }
+                         return response.json();
+                     })
+                     .then(data => {
+                         console.log('Response from server:', data);
+                         // Handle response data if needed
+                     })
+                     .catch(error => {
+                         console.error('There was a problem with the fetch operation:', error);
+                     }); */
 
                 var event = jsonObj['event'];
                 var action = jsonObj['action'];
@@ -290,7 +308,7 @@
                     var coordinates = jsonPayload['coordinates'];
 
 
-                    if(jsonObj['action'] === "eu.tarkovbot.tools.traderrestock") {
+                    if (jsonObj['action'] === "eu.tarkovbot.tools.traderrestock") {
                         traderrestockAction.onDidReceiveSettings(context, settings, coordinates);
                     }
                 }
