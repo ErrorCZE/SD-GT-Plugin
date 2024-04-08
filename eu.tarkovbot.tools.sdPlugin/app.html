@@ -169,7 +169,7 @@
 
         var traderrestockAction = {
             type: "eu.tarkovbot.tools.traderrestock",
-            intervalIds: {}, // Object to store interval IDs for each context
+            intervalIds: {},
 
             updateTitleAndImage: function (context, restockData) {
                 if (!restockData) {
@@ -195,7 +195,7 @@
             },
 
             startUpdating: function (context, settings, coordinates) {
-                clearInterval(this.intervalIds[context]); // Clear old interval associated with the current context
+                clearInterval(this.intervalIds[context]);
                 this.intervalIds[context] = setInterval(() => {
                     let trader = settings["selectedTrader"];
                     if (trader) {
@@ -206,16 +206,16 @@
             },
 
             stopUpdating: function (context) {
-                clearInterval(this.intervalIds[context]); // Clear interval associated with the provided context
+                clearInterval(this.intervalIds[context]);
             },
 
             onKeyDown: function (context, settings, coordinates, userDesiredState) {
                 let trader = settings["selectedTrader"];
 
                 if (userDesiredState === "desiredState") {
-                    this.stopUpdating(context); // Stop updating for the current context
+                    this.stopUpdating(context);
                 }
-                this.startUpdating(context, settings, coordinates); // Start updating for the current context
+                this.startUpdating(context, settings, coordinates);
             },
 
             onWillAppear: function (context, settings, coordinates) {
