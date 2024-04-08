@@ -15,6 +15,8 @@
         var pluginUUID = null;
         let intervalId = null;
 
+        let traderRestockData;
+
         var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
         function getTimeAgoString(timeDifference) {
@@ -38,6 +40,27 @@
 
             return timeAgo;
         }
+
+
+        function updateTraderData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://tarkovbot.eu/tools/trader-resets/gettimes", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        traderRestockData = response;
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        updateTraderData();
+        setInterval(updateTraderData, 15 * 60 * 1000);
+
+
+
 
         var goonsTrackerAction = {
 
@@ -145,46 +168,68 @@
         };
 
         var traderrestockAction = {
-
             type: "eu.tarkovbot.tools.traderrestock",
+            intervalIds: {}, // Object to store interval IDs for each context
 
-            onKeyDown: function (context, settings, coordinates, userDesiredState) {
-                let trader = settings["select_single"];
-
-                if (!trader) {
+            updateTitleAndImage: function (context, restockData) {
+                if (!restockData) {
                     this.SetTitle(context, "No\nTrader\nSelected");
                     this.SetImage(context, ``);
-                } else {
-                    this.SetTitle(context, trader);
-                    this.SetImage(context, `assets/${trader}.png`);
+                    return;
                 }
+
+                const resetTime = new Date(restockData.resetTime);
+                const currentTime = new Date();
+                const timeDifference = resetTime.getTime() - currentTime.getTime();
+
+                if (timeDifference > 0) {
+                    const hours = String(Math.floor(timeDifference / (1000 * 60 * 60))).padStart(2, '0');
+                    const minutes = String(Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    const seconds = String(Math.floor((timeDifference % (1000 * 60)) / 1000)).padStart(2, '0');
+                    this.SetTitle(context, `${hours}:${minutes}:${seconds}`);
+                } else {
+                    this.SetTitle(context, `Restocked\nrecently`);
+                }
+
+                this.SetImage(context, `assets/${restockData.name}.png`);
+            },
+
+            startUpdating: function (context, settings, coordinates) {
+                clearInterval(this.intervalIds[context]); // Clear old interval associated with the current context
+                this.intervalIds[context] = setInterval(() => {
+                    let trader = settings["selectedTrader"];
+                    if (trader) {
+                        let restockData = traderRestockData.find(data => data.name === trader);
+                        this.updateTitleAndImage(context, restockData);
+                    }
+                }, 1000);
+            },
+
+            stopUpdating: function (context) {
+                clearInterval(this.intervalIds[context]); // Clear interval associated with the provided context
+            },
+
+            onKeyDown: function (context, settings, coordinates, userDesiredState) {
+                let trader = settings["selectedTrader"];
+
+                if (userDesiredState === "desiredState") {
+                    this.stopUpdating(context); // Stop updating for the current context
+                }
+                this.startUpdating(context, settings, coordinates); // Start updating for the current context
             },
 
             onWillAppear: function (context, settings, coordinates) {
-                let trader = settings["select_single"];
+                this.startUpdating(context, settings, coordinates);
+            },
 
-                if (!trader) {
-                    this.SetTitle(context, "No\nTrader\nSelected");
-                    this.SetImage(context, ``);
-                } else {
-                    this.SetTitle(context, trader);
-                    this.SetImage(context, `assets/${trader}.png`);
-                }
+            onWillDisappear: function (context) {
+                this.stopUpdating(context);
             },
 
             onDidReceiveSettings: function (context, settings, coordinates) {
-                let trader = settings["select_single"];
-
-                if (!trader) {
-                    this.SetTitle(context, "No\nTrader\nSelected");
-                    this.SetImage(context, ``);
-                } else {
-                    this.SetTitle(context, trader);
-                    this.SetImage(context, `assets/${trader}.png`);
-                }
+                this.stopUpdating(context);
+                this.startUpdating(context, settings, coordinates);
             },
-
-
 
             SetTitle: function (context, currentTime) {
                 var json = {
@@ -199,6 +244,7 @@
 
                 websocket.send(JSON.stringify(json));
             },
+
             SetImage: function (context, image) {
                 var json = {
                     "event": "setImage",
@@ -213,6 +259,10 @@
                 websocket.send(JSON.stringify(json));
             }
         };
+
+
+
+
 
 
 
