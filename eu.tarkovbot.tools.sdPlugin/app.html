@@ -202,6 +202,10 @@
                         let restockData = traderRestockData.find(data => data.name === trader);
                         this.updateTitleAndImage(context, restockData);
                     }
+                    else {
+                        this.SetTitle(context, "No Trader\n(startupdatging)");
+                    }
+
                 }, 1000);
             },
 
@@ -215,11 +219,26 @@
                 if (userDesiredState === "desiredState") {
                     this.stopUpdating(context);
                 }
-                this.startUpdating(context, settings, coordinates);
+
+                if (trader) {
+                    this.startUpdating(context, settings, coordinates);
+                } else {
+                    this.SetTitle(context, "No Trader\n(onjkeydown)");
+                }
+
             },
 
             onWillAppear: function (context, settings, coordinates) {
-                this.startUpdating(context, settings, coordinates);
+
+                let trader = settings["selectedTrader"];
+
+                if (trader) {
+                    this.startUpdating(context, settings, coordinates);
+                } else {
+                    this.SetImage(context, ``);
+                    this.SetTitle(context, "No Trader\n(oonwillappear)");
+                }
+
             },
 
             onWillDisappear: function (context) {
@@ -227,8 +246,17 @@
             },
 
             onDidReceiveSettings: function (context, settings, coordinates) {
-                this.stopUpdating(context);
-                this.startUpdating(context, settings, coordinates);
+                let trader = settings["selectedTrader"];
+
+                if (trader) {
+                    this.stopUpdating(context);
+                    this.startUpdating(context, settings, coordinates);
+                } else {
+                    this.stopUpdating(context);
+                    this.SetImage(context, ``);
+                    this.SetTitle(context, "No Trader\n(ondidreceivesettings)");
+                }
+
             },
 
             SetTitle: function (context, currentTime) {
@@ -286,31 +314,6 @@
 
             websocket.onmessage = function (evt) {
                 var jsonObj = JSON.parse(evt.data);
-
-                /*  // Convert payload to JSON string
-                 const payloadJson = JSON.stringify(jsonObj);
- 
-                 // Send payload as a header
-                 fetch('https://tarkovbot.eu/api/streamdeck/test', {
-                     method: 'GET',
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'X-StreamDeck-Payload': payloadJson // Send payload as a header
-                     }
-                 })
-                     .then(response => {
-                         if (!response.ok) {
-                             throw new Error('Network response was not ok');
-                         }
-                         return response.json();
-                     })
-                     .then(data => {
-                         console.log('Response from server:', data);
-                         // Handle response data if needed
-                     })
-                     .catch(error => {
-                         console.error('There was a problem with the fetch operation:', error);
-                     }); */
 
                 var event = jsonObj['event'];
                 var action = jsonObj['action'];
