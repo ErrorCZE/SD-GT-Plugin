@@ -91,7 +91,7 @@
 			"States": [
 				{
 					"TitleAlignment": "middle",
-					"FontSize": "10"
+					"FontSize": "11"
 				}
 			],
 			"Tooltip": "Simply move this action to any button and wait for the time to show.",

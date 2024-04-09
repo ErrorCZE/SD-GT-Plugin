@@ -71,7 +71,7 @@
 
                 var token = "";
                 if (settings != null && settings.hasOwnProperty('token') && settings["token"] !== '') {
-                    goonsTrackerAction.SetTitle(context, "Loading...");
+                    goonsTrackerAction.SetTitle(context, "Loading");
                     token = settings["token"];
 
                     var xhr = new XMLHttpRequest();
@@ -133,12 +133,12 @@
 
                 function calculateTarkovTime() {
                     const currentDateTime = new Date();
-                    const tarkovnasobic = 7;
+                    const multiplier = 7;
 
-                    const tarkovCASlevy = new Date(currentDateTime.getTime() * tarkovnasobic).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Moscow' });
-                    const tarkovCASpravy = new Date(currentDateTime.getTime() * tarkovnasobic - 43200000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Moscow' });
+                    const tarkovTimeLeft = new Date(currentDateTime.getTime() * multiplier).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Moscow' });
+                    const tarkovTimeRight = new Date(currentDateTime.getTime() * multiplier - 43200000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Moscow' });
 
-                    tarkovTimeAction.SetTitle(context, tarkovCASlevy + "\n" + tarkovCASpravy);
+                    tarkovTimeAction.SetTitle(context, tarkovTimeLeft + "\n" + tarkovTimeRight);
                 }
 
                 calculateTarkovTime();
@@ -173,7 +173,7 @@
 
             updateTitleAndImage: function (context, restockData) {
                 if (!restockData) {
-                    this.SetTitle(context, "No\nTrader\nSelected");
+                    this.SetTitle(context, "Select\nTrader");
                     this.SetImage(context, ``);
                     return;
                 }
@@ -183,12 +183,12 @@
                 const timeDifference = resetTime.getTime() - currentTime.getTime();
 
                 if (timeDifference > 0) {
-                    const hours = String(Math.floor(timeDifference / (1000 * 60 * 60))).padStart(2, '0');
+                    const hours = String(Math.floor(timeDifference / (1000 * 60 * 60))).padStart(1, '0');
                     const minutes = String(Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
                     const seconds = String(Math.floor((timeDifference % (1000 * 60)) / 1000)).padStart(2, '0');
-                    this.SetTitle(context, `${hours}:${minutes}:${seconds}`);
+                    this.SetTitle(context, `\n\n\n${hours}:${minutes}:${seconds}`);
                 } else {
-                    this.SetTitle(context, `Restocked\nrecently`);
+                    this.SetTitle(context, `\n\n\nRestock`);
                 }
 
                 this.SetImage(context, `assets/${restockData.name}.png`);
@@ -203,7 +203,7 @@
                         this.updateTitleAndImage(context, restockData);
                     }
                     else {
-                        this.SetTitle(context, "No Trader\n(startupdatging)");
+                        this.SetTitle(context, "Select\nTrader");
                     }
 
                 }, 1000);
@@ -213,39 +213,25 @@
                 clearInterval(this.intervalIds[context]);
             },
 
-            onKeyDown: function (context, settings, coordinates, userDesiredState) {
-                let trader = settings["selectedTrader"];
-
-                if (userDesiredState === "desiredState") {
-                    this.stopUpdating(context);
-                }
-
-                if (trader) {
-                    this.startUpdating(context, settings, coordinates);
-                } else {
-                    this.SetTitle(context, "No Trader\n(onjkeydown)");
-                }
-
-            },
-
             onWillAppear: function (context, settings, coordinates) {
-
+                this.SetTitle(context, "\n\n\nLoading");
                 let trader = settings["selectedTrader"];
 
                 if (trader) {
                     this.startUpdating(context, settings, coordinates);
                 } else {
                     this.SetImage(context, ``);
-                    this.SetTitle(context, "No Trader\n(oonwillappear)");
+                    this.SetTitle(context, "Select\nTrader");
                 }
 
             },
 
-            onWillDisappear: function (context) {
+            onWillDisappear: function (context, settings, coordinates) {
                 this.stopUpdating(context);
             },
 
             onDidReceiveSettings: function (context, settings, coordinates) {
+                this.SetTitle(context, "\n\n\nLoading");
                 let trader = settings["selectedTrader"];
 
                 if (trader) {
@@ -254,7 +240,7 @@
                 } else {
                     this.stopUpdating(context);
                     this.SetImage(context, ``);
-                    this.SetTitle(context, "No Trader\n(ondidreceivesettings)");
+                    this.SetTitle(context, "Select\nTrader");
                 }
 
             },
@@ -363,6 +349,14 @@
 
                     if (jsonObj['action'] === "eu.tarkovbot.tools.traderrestock") {
                         traderrestockAction.onDidReceiveSettings(context, settings, coordinates);
+                    }
+                } else if (event == "willDisappear") {
+                    var jsonPayload = jsonObj['payload'];
+                    var settings = jsonPayload['settings'];
+                    var coordinates = jsonPayload['coordinates'];
+
+                    if (jsonObj['action'] === "eu.tarkovbot.tools.traderrestock") {
+                        traderrestockAction.onWillDisappear(context, settings, coordinates);
                     }
                 }
             }
