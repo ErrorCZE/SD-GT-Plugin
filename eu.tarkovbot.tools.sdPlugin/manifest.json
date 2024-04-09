@@ -2,11 +2,11 @@
 	"SDKVersion": 2,
 	"Author": "TarkovBOT.eu",
 	"CodePath": "app.html",
-	"Description": "Tools designed for Escape from Tarkov streamers and regular players.",
+	"Description": "Tools designed for Escape from Tarkov streamers and regular players. For example Goons Tracker, Trader Restocks and more.",
 	"Name": "Escape from Tarkov Tools",
 	"Icon": "assets/icon",
 	"URL": "https://tarkovbot.eu/stream-deck",
-	"Version": "1.0.0",
+	"Version": "1.1.0",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
