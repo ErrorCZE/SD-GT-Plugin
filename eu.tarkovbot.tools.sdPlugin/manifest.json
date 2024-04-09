@@ -28,13 +28,7 @@
 			"Name": "GoonsTracker - Latest Report",
 			"Controllers": ["Keypad", "Encoder"],
 			"Encoder": {
-				"layout": "$B1",
-				"TriggerDescription": {
-					"Rotate": "Describe the rotation",
-					"Push": "Describe the encoder push",
-					"Touch": "Describe the touch",
-					"LongTouch": "Describe the long touch"
-				}
+				"layout": "$B1"
 			},
 			"States": [
 				{
@@ -51,13 +45,7 @@
 			"Name": "Tarkov Time",
 			"Controllers": ["Keypad", "Encoder"],
 			"Encoder": {
-				"layout": "$B1",
-				"TriggerDescription": {
-					"Rotate": "Describe the rotation",
-					"Push": "Describe the encoder push",
-					"Touch": "Describe the touch",
-					"LongTouch": "Describe the long touch"
-				}
+				"layout": "$B1"
 			},
 			"States": [
 				{
@@ -69,24 +57,12 @@
 			"UserTitleEnabled": false,
 			"UUID": "eu.tarkovbot.tools.tarkovtime"
 		},
-
-
-
-
-
-
 		{
-			"Icon": "assets/actionicon_traderrestock",
+			"Icon": "assets/actionicon_restock",
 			"Name": "Trader Restock Timer",
 			"Controllers": ["Keypad", "Encoder"],
 			"Encoder": {
-				"layout": "$B1",
-				"TriggerDescription": {
-					"Rotate": "Describe the rotation",
-					"Push": "Describe the encoder push",
-					"Touch": "Describe the touch",
-					"LongTouch": "Describe the long touch"
-				}
+				"layout": "$B1"
 			},
 			"States": [
 				{
