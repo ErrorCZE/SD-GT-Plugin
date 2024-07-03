@@ -11,10 +11,13 @@ $PI.onConnected((jsn) => {
     const setFormValue = (settings, form) => {
         for (let key in settings) {
             if (form.elements[key]) {
-                if (form.elements[key].tagName === 'SELECT') {
-                    form.elements[key].value = settings[key];
+                const element = form.elements[key];
+                if (element.tagName === 'SELECT') {
+                    element.value = settings[key];
+                } else if (element.type === 'checkbox') {
+                    element.checked = settings[key];
                 } else {
-                    form.elements[key].value = settings[key];
+                    element.value = settings[key];
                 }
             }
         }
@@ -22,13 +25,23 @@ $PI.onConnected((jsn) => {
 
     // Function to get form value
     const getFormValue = (form) => {
-        const formData = new FormData(form);
         const value = {};
-        formData.forEach((val, key) => {
-            value[key] = val;
-        });
+        for (let element of form.elements) {
+            if (element.name) {
+                if (element.type === 'checkbox') {
+                    value[element.name] = element.checked ? true : false;
+                } else if (element.type === 'radio') {
+                    if (element.checked) {
+                        value[element.name] = element.value;
+                    }
+                } else {
+                    value[element.name] = element.value;
+                }
+            }
+        }
         return value;
     };
+
 
     // Set initial form values
     setFormValue(settings, form);
@@ -52,7 +65,7 @@ $PI.onConnected((jsn) => {
 
 
 
-$PI.onDidReceiveGlobalSettings(({payload}) => {
+$PI.onDidReceiveGlobalSettings(({ payload }) => {
     console.log('onDidReceiveGlobalSettings', payload);
 })
 
@@ -101,13 +114,13 @@ function activateTabs(activeTab) {
     let activeTabEl = null;
     allTabs.forEach((el, i) => {
         el.onclick = () => clickTab(el);
-        if(el.dataset?.target === activeTab) {
+        if (el.dataset?.target === activeTab) {
             activeTabEl = el;
         }
     });
-    if(activeTabEl) {
+    if (activeTabEl) {
         clickTab(activeTabEl);
-    } else if(allTabs.length) {
+    } else if (allTabs.length) {
         clickTab(allTabs[0]);
     }
 }
@@ -118,9 +131,9 @@ function clickTab(clickedTab) {
     clickedTab.classList.add('selected');
     activeTab = clickedTab.dataset?.target;
     allTabs.forEach((el, i) => {
-        if(el.dataset.target) {
+        if (el.dataset.target) {
             const t = document.querySelector(el.dataset.target);
-            if(t) {
+            if (t) {
                 t.style.display = el == clickedTab ? 'block' : 'none';
             }
         }

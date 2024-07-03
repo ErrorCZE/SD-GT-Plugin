@@ -3,6 +3,7 @@ var pluginUUID = null;
 let intervalId = null;
 
 let traderRestockData;
+let traderRestockData_PVE;
 
 var DestinationEnum = Object.freeze({ "HARDWARE_AND_SOFTWARE": 0, "HARDWARE_ONLY": 1, "SOFTWARE_ONLY": 2 })
 
@@ -31,12 +32,12 @@ function getTimeAgoString(timeDifference) {
 
 function updateTraderData() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://tarkovbot.eu/tools/trader-resets/gettimes", true);
+    xhr.open("GET", "https://tarkovbot.eu/api/trader-resets/", true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                traderRestockData = response;
+                traderRestockData = response.data.traders;
             }
         }
     };
@@ -45,6 +46,24 @@ function updateTraderData() {
 
 updateTraderData();
 setInterval(updateTraderData, 5 * 60 * 1000);
+
+
+function updateTraderData_PVE() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://tarkovbot.eu/api/pve/trader-resets/", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                traderRestockData_PVE = response.data.traders;
+            }
+        }
+    };
+    xhr.send();
+}
+
+updateTraderData_PVE();
+setInterval(updateTraderData_PVE, 5 * 55 * 1000);
 
 
 var goonsTrackerAction = {
@@ -159,7 +178,7 @@ var traderrestockAction = {
 
     updateTitleAndImage: function (context, restockData) {
         if (!restockData) {
-            this.SetTitle(context, "Select\nTrader");
+            this.SetTitle(context, "No Data");
             this.SetImage(context, ``);
             return;
         }
@@ -184,11 +203,14 @@ var traderrestockAction = {
         clearInterval(this.intervalIds[context]);
         this.intervalIds[context] = setInterval(() => {
             let trader = settings["selectedTrader"];
+            let pveMODE = settings["pve_traders_mode_check"];
+
             if (trader) {
-                let restockData = traderRestockData.find(data => data.name === trader);
+                let restockData = (pveMODE ? traderRestockData_PVE : traderRestockData).find(data => data.name === trader);
                 this.updateTitleAndImage(context, restockData);
             }
             else {
+                this.SetImage(context, ``);
                 this.SetTitle(context, "Select\nTrader");
             }
 
