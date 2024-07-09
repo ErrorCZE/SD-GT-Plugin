@@ -77,6 +77,7 @@ var goonsTrackerAction = {
         if (settings != null && settings.hasOwnProperty('token') && settings["token"] !== '') {
             goonsTrackerAction.SetTitle(context, "Loading");
             token = settings["token"];
+            let source = settings["selectedGoonsSource"];
 
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "https://tarkovbot.eu/api/streamdeck/goonslocation", true);
@@ -84,13 +85,29 @@ var goonsTrackerAction = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        var location = response.location;
-                        var reportedTime = new Date(response.reported);
-                        var timeDifference = Date.now() - reportedTime;
-                        var timeAgo = getTimeAgoString(timeDifference);
+                        if (source === "PVE") {
+                            var response = JSON.parse(xhr.responseText);
+                            var location = response.pve.location;
+                            var reportedTime = new Date(response.pve.reported);
+                            var timeDifference = Date.now() - reportedTime;
+                            var timeAgo = getTimeAgoString(timeDifference);
+                            goonsTrackerAction.SetTitle(context, location + "\n" + timeAgo); 
+                        } else if (source === "PVP") {
+                            var response = JSON.parse(xhr.responseText);
+                            var location = response.pvp.location;
+                            var reportedTime = new Date(response.pvp.reported);
+                            var timeDifference = Date.now() - reportedTime;
+                            var timeAgo = getTimeAgoString(timeDifference);
+                            goonsTrackerAction.SetTitle(context, location + "\n" + timeAgo);
+                        } else {
+                            var response = JSON.parse(xhr.responseText);
+                            var location = response.location;
+                            var reportedTime = new Date(response.reported);
+                            var timeDifference = Date.now() - reportedTime;
+                            var timeAgo = getTimeAgoString(timeDifference);
 
-                        goonsTrackerAction.SetTitle(context, location + "\n" + timeAgo);
+                            goonsTrackerAction.SetTitle(context, location + "\n" + timeAgo);
+                        }
                     }
                     else if (xhr.status === 401) {
                         goonsTrackerAction.SetTitle(context, "Invalid\nToken");
