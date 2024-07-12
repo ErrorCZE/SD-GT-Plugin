@@ -49,7 +49,7 @@ $PI.onConnected((jsn) => {
     // Event listener for changes in the form inputs
     const inputs = form.querySelectorAll('.sdpi-item-value');
     inputs.forEach(input => {
-        input.addEventListener('change', Utils.debounce(150, (event) => {
+        input.addEventListener('input', Utils.debounce(150, (event) => {
             const value = getFormValue(form);
             $PI.setSettings(value);
         }));
