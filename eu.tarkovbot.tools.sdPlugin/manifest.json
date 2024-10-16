@@ -77,6 +77,24 @@
 			"UserTitleEnabled": false,
 			"UUID": "eu.tarkovbot.tools.traderrestock",
 			"PropertyInspectorPath": "property-inspector/inspector_traderrestock.html"
+		},
+		{
+			"Icon": "assets/actionicon_restock",
+			"Name": "Tarkov weather",
+			"Controllers": ["Keypad", "Encoder"],
+			"Encoder": {
+				"layout": "$B1"
+			},
+			"States": [
+				{
+					"Image": "assets/empty_image",
+					"TitleAlignment": "middle",
+					"FontSize": "13"
+				}
+			],
+			"Tooltip": "Simply move this action to any button and wait for the weather to show.",
+			"UserTitleEnabled": false,
+			"UUID": "eu.tarkovbot.tools.weather"
 		}
 	]
 }
