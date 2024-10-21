@@ -5,6 +5,7 @@ let pluginUUID = null;
 let intervalId = null;
 let traderRestockData;
 let traderRestockData_PVE;
+let currentDevice = null;
 
 const API_URLS = {
     TRADER_RESETS: "https://tarkovbot.eu/api/trader-resets/",
@@ -86,13 +87,14 @@ class Action {
         }));
     }
 
-    switchToProfile(context, profile) {
+    switchToProfile(context, device, profileName) {
         websocket.send(JSON.stringify({
-            event: "switchToProfile",
-            context: context,
-            device: pluginUUID,
-            payload: {
-                profile: profile
+            "event": "switchToProfile",
+            "context": context,
+            "device": device,
+            "payload": {
+                "profile": profileName,
+                "page": 0
             }
         }));
     }
@@ -227,13 +229,24 @@ class MapInfoAction extends Action {
     }
 
     onKeyUp(context, settings) {
-        this.switchToProfile(context, "Map Info XL");
-    }       
+        if (currentDevice) {
+            const message = {
+                event: "switchToProfile",
+                context: pluginUUID,
+                device: currentDevice,
+                payload: {
+                    profile: "Map Info XL"
+                }
+            };
+            websocket.send(JSON.stringify(message));
+        }
+    }
 
     onWillAppear(context) {
         this.setTitle(context, "Switch\nProfile");
     }
 }
+
 
 
 
@@ -244,8 +257,13 @@ const actions = {
     "eu.tarkovbot.tools.mapinfo": new MapInfoAction()
 };
 
-const connectElgatoStreamDeckSocket = (inPort, inPluginUUID, inRegisterEvent) => {
+const connectElgatoStreamDeckSocket = (inPort, inPluginUUID, inRegisterEvent, inInfo) => {
     pluginUUID = inPluginUUID;
+    const info = JSON.parse(inInfo);
+    if (info && info.devices && info.devices.length > 0) {
+        currentDevice = info.devices[0].id;
+    }
+
     websocket = new WebSocket(`ws://127.0.0.1:${inPort}`);
 
     websocket.onopen = () => {
@@ -257,29 +275,36 @@ const connectElgatoStreamDeckSocket = (inPort, inPluginUUID, inRegisterEvent) =>
 
     websocket.onmessage = (evt) => {
         const jsonObj = JSON.parse(evt.data);
-        const { event, action, context, payload } = jsonObj;
+        const { event, action, context, payload, device } = jsonObj;
+
+        if (event === "deviceDidConnect") {
+            currentDevice = device;
+        }
 
         switch (event) {
             case "keyDown":
-                actions[action]?.onKeyDown(context, payload.settings);
+                actions[action]?.onKeyDown(context, payload?.settings);
                 break;
             case "keyUp":
-                actions[action]?.onKeyUp(context, payload.settings);
+                actions[action]?.onKeyUp(context, payload?.settings);
                 break;
             case "willAppear":
-                actions[action]?.onWillAppear(context, payload.settings);
+                actions[action]?.onWillAppear(context, payload?.settings);
                 break;
             case "didReceiveSettings":
-                actions[action]?.onDidReceiveSettings(context, payload.settings);
+                actions[action]?.onDidReceiveSettings(context, payload?.settings);
                 break;
             case "willDisappear":
-                actions[action]?.onWillDisappear(context, payload.settings);
+                actions[action]?.onWillDisappear(context, payload?.settings);
                 break;
         }
     };
 
     websocket.onclose = () => { };
+    websocket.onerror = (error) => { };
 };
+
+
 
 const handleKeyDown = (action, context, payload) => {
     const { settings, coordinates, userDesiredState } = payload;
@@ -287,8 +312,8 @@ const handleKeyDown = (action, context, payload) => {
 };
 
 const handleKeyUp = (action, context, payload) => {
-    const { settings, coordinates, userDesiredState } = payload;
-    actions[action]?.onKeyUp(context, settings, coordinates, userDesiredState);
+    const { settings, coordinates, userDesiredState, device } = payload;
+    actions[action]?.onKeyUp(context, settings, coordinates, device);
 };
 
 const handleWillAppear = (action, context, payload) => {
