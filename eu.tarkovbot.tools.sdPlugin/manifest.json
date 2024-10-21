@@ -79,22 +79,150 @@
 			"PropertyInspectorPath": "property-inspector/inspector_traderrestock.html"
 		},
 		{
-			"Icon": "assets/actionicon_restock",
-			"Name": "Tarkov weather",
+			"Icon": "assets/actionicon_mapinfo",
+			"Name": "Current Map Info",
 			"Controllers": ["Keypad", "Encoder"],
-			"Encoder": {
-				"layout": "$B1"
-			},
 			"States": [
-				{
-					"Image": "assets/empty_image",
-					"TitleAlignment": "middle",
-					"FontSize": "13"
-				}
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
 			],
-			"Tooltip": "Simply move this action to any button and wait for the weather to show.",
+			"Tooltip": "Displays current map information.",
 			"UserTitleEnabled": false,
-			"UUID": "eu.tarkovbot.tools.weather"
+			"UUID": "eu.tarkovbot.tools.mapinfo"
+		},
+		{
+			"Name": "Map Info - Name",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.name"
+		},
+		{
+			"Name": "Map Info - Raid Duration",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.raidduration"
+		},
+		{
+			"Name": "Map Info - Player Count",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.playercount"
+		},
+		{
+			"Name": "Map Info - Boss Info",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.bossinfo"
+		},
+		{
+			"Name": "Map Info - Main Profile Btn",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.mainprofile"
+		},
+		{
+			"Name": "Map Info - Next Page Btn",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.nextpage"
+		},
+		{
+			"Name": "Map Info - Previous Page Btn",
+			"Controllers": ["Keypad", "Encoder"],
+			"States": [
+			  {
+				"Image": "assets/empty_image",
+				"TitleAlignment": "middle",
+				"FontSize": "13"
+			  }
+			],
+			"UserTitleEnabled": false,
+			"VisibleInActionsList": true,
+			"SupportedInMultiActions": false,
+			"UUID": "eu.tarkovbot.tools.mapinfo.previouspage"
 		}
-	]
+	],
+	"Profiles": [
+        {
+            "Name": "Map Info XL",
+            "DeviceType": 0,
+            "Readonly": true,
+            "DontAutoSwitchWhenInstalled": true
+        },
+		{
+            "Name": "Map Info XL",
+            "DeviceType": 1,
+            "Readonly": true,
+            "DontAutoSwitchWhenInstalled": true
+        },
+		{
+            "Name": "Map Info XL",
+            "DeviceType": 2,
+            "Readonly": true,
+            "DontAutoSwitchWhenInstalled": true
+        },
+		{
+            "Name": "Map Info XL",
+            "DeviceType": 3,
+            "Readonly": true,
+            "DontAutoSwitchWhenInstalled": true
+        }
+    ]
 }

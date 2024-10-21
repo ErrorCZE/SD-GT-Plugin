@@ -10,7 +10,6 @@ const API_URLS = {
     TRADER_RESETS: "https://tarkovbot.eu/api/trader-resets/",
     PVE_TRADER_RESETS: "https://tarkovbot.eu/api/pve/trader-resets/",
     GOONS_LOCATION: "https://tarkovbot.eu/api/streamdeck/goonslocation",
-    WEATHER: "https://tarkovbot.eu/api/weather"
 };
 
 const fetchData = (url, token = null) => {
@@ -57,6 +56,7 @@ setInterval(updateTraderData, 5 * 60 * 1000);
 updateTraderData_PVE();
 setInterval(updateTraderData_PVE, 5 * 55 * 1000);
 
+
 class Action {
     constructor(type) {
         this.type = type;
@@ -82,6 +82,17 @@ class Action {
                 image,
                 target: DestinationEnum.HARDWARE_AND_SOFTWARE,
                 state: 2
+            }
+        }));
+    }
+
+    switchToProfile(context, profile) {
+        websocket.send(JSON.stringify({
+            event: "switchToProfile",
+            context: context,
+            device: pluginUUID,
+            payload: {
+                profile: profile
             }
         }));
     }
@@ -210,54 +221,27 @@ class TraderRestockAction extends Action {
     }
 }
 
-class WeatherAction extends Action {
+class MapInfoAction extends Action {
     constructor() {
-        super("eu.tarkovbot.tools.weather");
-        this.intervalId = null;
+        super("eu.tarkovbot.tools.mapinfo");
     }
 
-    fetchAndUpdateWeather(context) {
-        this.setTitle(context, "Loading");
-
-        fetch(API_URLS.WEATHER, {
-            method: "GET",
-            headers: {
-                "AUTH-TOKEN": "654sa6d54a6s45da"
-            }
-        })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
-            .then(data => {
-                this.setTitle(context, "");
-                this.setImage(context, `assets/${data.weather.replace(" ", "_")}.png`);
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-    }
+    onKeyUp(context, settings) {
+        this.switchToProfile(context, "Map Info XL");
+    }       
 
     onWillAppear(context) {
-        this.fetchAndUpdateWeather(context);
-
-        if (this.intervalId !== null) clearInterval(this.intervalId);
-        this.intervalId = setInterval(() => this.fetchAndUpdateWeather(context), 5 * 60 * 1000);
-    }
-
-    onWillDisappear() {
-        if (this.intervalId !== null) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
+        this.setTitle(context, "Switch\nProfile");
     }
 }
+
+
 
 const actions = {
     "eu.tarkovbot.tools.goonsgetlocation": new GoonsTrackerAction(),
     "eu.tarkovbot.tools.tarkovtime": new TarkovTimeAction(),
     "eu.tarkovbot.tools.traderrestock": new TraderRestockAction(),
-    "eu.tarkovbot.tools.weather": new WeatherAction()
+    "eu.tarkovbot.tools.mapinfo": new MapInfoAction()
 };
 
 const connectElgatoStreamDeckSocket = (inPort, inPluginUUID, inRegisterEvent) => {
